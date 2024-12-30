@@ -36,8 +36,3 @@ Sleep Mode: The microcontroller can run for extended periods without restarting 
 Interrupts: The microcontroller is woken up by changes in the door contacts (magnetic switches), meaning the alarm will trigger immediately when a door is opened.
 
 Delay Time: The delay time before the alarm is activated is set to 3 seconds. This value can be easily adjusted by changing the delayTime variable.
-
-Potential Improvements
-Add more doors by using additional pins for door contacts.
-Integrate an LED or display to show the status of the doors.
-Expand the project to implement a custom alarm duration or different beep patterns for the piezo buzzer.
