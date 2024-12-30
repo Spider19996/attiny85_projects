@@ -1,0 +1,43 @@
+Door Alarm with ATtiny85 and Piezo
+This project uses an ATtiny85 microcontroller to create a simple door alarm. The microcontroller monitors two door contacts (magnetic switches) and triggers a piezo buzzer when either door is opened. The alarm is activated after a 3-second delay and stops when both doors are closed. The ATtiny85 operates in the SLEEP_MODE_PWR_DOWN to minimize power consumption, making it suitable for battery-powered applications.
+
+Functionality
+Door Monitoring: Two pins of the ATtiny85 (Pin 0 and Pin 2) are used to monitor the state of the door contacts. If one of the doors is opened, the microcontroller is alerted via an interrupt.
+
+Piezo Alarm: If a door is opened and the delay time (3 seconds) has passed, a piezo buzzer is activated, emitting a 1-second beep followed by a 1-second pause. This cycle repeats as long as the door remains open.
+
+Sleep Mode: If neither door is open and the piezo buzzer is not active, the microcontroller enters SLEEP_MODE_PWR_DOWN, reducing power consumption. The microcontroller is only awakened by changes in the door contacts (via interrupts).
+
+Low Power Consumption: The microcontroller is designed to operate with minimal power consumption, making it capable of running for long periods without restarting.
+
+Schematic
+DOOR1_PIN (PB2): Input for the first door's magnetic switch.
+DOOR2_PIN (PB0): Input for the second door's magnetic switch.
+PIEZO_PIN (PB1): Output for the piezo buzzer.
+Code Details
+Delay: A 3-second delay is implemented before activating the piezo buzzer. During this time, the state of the doors is checked.
+
+Interrupts: The microcontroller uses pin-change interrupts to respond to changes in the state of the door contacts.
+
+Sleep Mode: If no door is open and the piezo is inactive, the microcontroller enters SLEEP_MODE_PWR_DOWN to minimize power consumption.
+
+Hardware
+ATtiny85 Microcontroller
+2 x Magnetic Door Contacts (Switches)
+1 x Piezo Buzzer
+Installation
+Connect the ATtiny85 to your programmer (e.g., USBasp or a similar programming solution).
+Upload the code to the ATtiny85.
+Connect the door contacts to the appropriate pins and the piezo buzzer to the PIEZO_PIN (PB1).
+Ensure that the microcontroller is properly powered.
+Important Notes
+Sleep Mode: The microcontroller can run for extended periods without restarting when using SLEEP_MODE_PWR_DOWN, significantly reducing power consumption.
+
+Interrupts: The microcontroller is woken up by changes in the door contacts (magnetic switches), meaning the alarm will trigger immediately when a door is opened.
+
+Delay Time: The delay time before the alarm is activated is set to 3 seconds. This value can be easily adjusted by changing the delayTime variable.
+
+Potential Improvements
+Add more doors by using additional pins for door contacts.
+Integrate an LED or display to show the status of the doors.
+Expand the project to implement a custom alarm duration or different beep patterns for the piezo buzzer.
