@@ -28,7 +28,7 @@ void setup() {
 
     ADCSRA &= ~(1 << ADEN); // ADC dauerhaft deaktivieren, da er nicht benötigt wird
 
-    PCMSK |= (1 << DOOR1_PIN) | (1 << DOOR2_PIN); // Überwachung von PB2 und PB3
+    PCMSK |= (1 << DOOR1_PIN) | (1 << DOOR2_PIN); // Überwachung von PB2 und PB0
     GIMSK |= (1 << PCIE); // Pin-Change-Interrupts aktivieren
 
     sei(); // Globale Interrupts aktivieren
