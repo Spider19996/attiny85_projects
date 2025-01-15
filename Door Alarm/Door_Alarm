@@ -3,15 +3,16 @@
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
 
-
-// PB3 ist ungeeignet als DOOR_PIN, er wird als RESET Pin genutzt und ruft beim start unvorhersehbare Zustände vor.
+// Pinbelegung
 #define DOOR1_PIN 2  // Pin für den Magnetschalter Tür 1 (PB2)
 #define DOOR2_PIN 0  // Pin für den Magnetschalter Tür 2 (PB0)
 #define PIEZO_PIN 1  // Pin für den Piezo und die Platinen LED (PB1)
 
 const unsigned long delayTime = 3000; // Wartezeit bis Türalarm los geht
-const unsigned long beepDurationOn = 1000;  // Piepton-Dauer
-const unsigned long beepDurationOff = 1000; // Pause-Dauer zwischen Pieptönen
+const unsigned long beepDuration1On = 500;  // Piepton-Dauer für Tür 1
+const unsigned long beepDuration1Off = 3000; // Pause-Dauer für Tür 1
+const unsigned long beepDuration2On = 500;  // Piepton-Dauer für Tür 2
+const unsigned long beepDuration2Off = 500; // Pause-Dauer für Tür 2
 
 volatile bool doorOpen = false;  // Wird durch Interrupt gesetzt
 unsigned long lastActionMillis = 0; // Letzte Aktivität
@@ -19,7 +20,6 @@ unsigned long beepMillis = 0;       // Letzter Piepton
 bool piezoActive = false;
 
 void setup() {
-
     lastActionMillis = millis();
   
     pinMode(DOOR1_PIN, INPUT_PULLUP);
@@ -32,7 +32,6 @@ void setup() {
     GIMSK |= (1 << PCIE); // Pin-Change-Interrupts aktivieren
 
     sei(); // Globale Interrupts aktivieren
-
 }
 
 void loop() {
@@ -51,12 +50,27 @@ void loop() {
 
     // Piezo-Logik
     if (piezoActive) {
+        // Überprüfen, welche Tür offen ist und passende Zeiten anwenden
+        unsigned long beepOnTime = 0;
+        unsigned long beepOffTime = 0;
+
+        if (digitalRead(DOOR1_PIN) == HIGH && digitalRead(DOOR2_PIN) == LOW) {
+            beepOnTime = beepDuration1On;
+            beepOffTime = beepDuration1Off;
+        } else if (digitalRead(DOOR2_PIN) == HIGH && digitalRead(DOOR1_PIN) == LOW) {
+            beepOnTime = beepDuration2On;
+            beepOffTime = beepDuration2Off;
+        } else if (digitalRead(DOOR1_PIN) == HIGH && digitalRead(DOOR2_PIN) == HIGH) {
+            beepOnTime = beepDuration1On; // Durchgehend piepsen bei beiden Türen offen
+            beepOffTime = 0;              // Keine Pause, durchgehend piepsen
+        }
+
         // Piepton erzeugen
-        if (millis() - beepMillis < beepDurationOn) {
+        if (millis() - beepMillis < beepOnTime) {
             digitalWrite(PIEZO_PIN, HIGH); // Piezo einschalten
         }
         // Pause nach Piepton
-        else if (millis() - beepMillis < beepDurationOn + beepDurationOff) {
+        else if (millis() - beepMillis < beepOnTime + beepOffTime) {
             digitalWrite(PIEZO_PIN, LOW); // Piezo ausschalten
         }
         // Zyklus abschließen
