@@ -8,7 +8,7 @@
 #define DOOR2_PIN 0  // Pin für den Magnetschalter Tür 2 (PB0)
 #define PIEZO_PIN 1  // Pin für den Piezo und die Platinen LED (PB1)
 
-const unsigned long delayTime = 10000; // Wartezeit bis Türalarm los geht
+const unsigned long delayTime = 60000; // Wartezeit bis Türalarm los geht
 const unsigned long beepDuration1On = 500;  // Piepton-Dauer für Tür 1
 const unsigned long beepDuration1Off = 3000; // Pause-Dauer für Tür 1
 const unsigned long beepDuration2On = 500;  // Piepton-Dauer für Tür 2
